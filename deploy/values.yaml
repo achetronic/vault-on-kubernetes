@@ -1,0 +1,4 @@
+# Ref: https://github.com/hashicorp/vault-helm/blob/main/values.yaml
+# Ref: https://www.vaultproject.io/docs/platform/k8s/helm/configuration
+
+vault: {}

@@ -1,0 +1,10 @@
+{
+  "policies": [
+    "acls-read-kubernetes-dremel-secrets",
+    "acls-write-kubernetes-dremel-secrets"
+  ],
+  "alias": {
+    "name": "/products/dremel",
+    "mount": "auth/oidc/"
+  }
+}

@@ -1,0 +1,81 @@
+# DISCLAIMER: THESE VALUES ARE FOR DEVELOPMENT PURPOSES ONLY.
+# PLEASE, DON'T DO DIRTY THINGS
+
+vault:
+
+  # Configuration parameters for the agent injection
+  injector:
+    enabled: false
+
+  server:
+    # Configure sane defaults for Loki to be able to collect the logs
+    logLevel: "debug"
+    logFormat: "json"
+
+    # Ingress allows ingress services to be created to allow external access
+    # from Kubernetes to access Vault pods.
+    ingress:
+      enabled: true
+      ingressClassName: "nginx"
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-production
+        external-dns.alpha.kubernetes.io/ttl: 1m
+      hosts:
+        - host: &host vault.dev.example.com
+          paths: ["/"]
+      tls:
+        - secretName: vault-tls
+          hosts:
+            - *host
+
+    # A list of extra environment variables to set with the stateful set.
+    extraSecretEnvironmentVars:
+      # Credentials for the IAM user
+      - envName: AWS_ACCESS_KEY_ID
+        secretName: vault-cloud-credentials
+        secretKey: AWS_ACCESS_KEY_ID
+      - envName: AWS_SECRET_ACCESS_KEY
+        secretName: vault-cloud-credentials
+        secretKey: AWS_SECRET_ACCESS_KEY
+
+      # Credentials for KMS, which is used for auto-unsealing
+      - envName: VAULT_AWSKMS_SEAL_KEY_ID
+        secretName: vault-cloud-credentials
+        secretKey: VAULT_AWSKMS_SEAL_KEY_ID
+
+    # DISCLAIMER:
+    # S3 storage does not support HA. That is the reason behind using standalone mode for development.
+    # If you want to use HA, please use Raft or Consult as storage for that.
+    # Ref: https://www.consul.io/docs/k8s/installation/install#helm-chart-installation
+    # Ref: https://www.vaultproject.io/docs/platform/k8s/helm/examples/ha-with-raft
+    # Ref: https://www.vaultproject.io/docs/platform/k8s/helm/examples/ha-with-consul
+
+    # Run Vault in "HA" mode.
+    standalone:
+      config: |
+        # Enable the UI launching
+        ui = true
+        
+        # Configure how Vault can be accessed by networks
+        listener "tcp" {
+          tls_disable = 1
+          address = "[::]:8200"
+          cluster_address = "[::]:8201"
+        }
+        
+        #service_registration "kubernetes" {}
+        
+        # Configure the storage for credentials
+        storage "s3" {
+          bucket     = "bucket-s3-develop-example-com"
+          region     = "eu-west-1"
+        }
+        
+        # Configuration for auto-unsealing
+        #seal "awskms" {
+        #  region     = "eu-west-1"
+        #}
+
+  # Configuration parameters for Vault GUI
+  ui:
+    enabled: true

@@ -1,0 +1,10 @@
+{
+  "policies": [
+    "acls-read-kubernetes-warpcache-secrets",
+    "acls-write-kubernetes-warpcache-secrets"
+  ],
+  "alias": {
+    "name": "/products/warpcache",
+    "mount": "auth/oidc/"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "policies": [
+    "acls-admin",
+    "acls-deny-ultrainstinct"
+  ],
+  "alias": {
+    "name": "/chapters/sre",
+    "mount": "auth/oidc/"
+  }
+}

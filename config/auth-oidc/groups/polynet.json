@@ -1,0 +1,10 @@
+{
+  "policies": [
+    "acls-read-kubernetes-polynet-secrets",
+    "acls-write-kubernetes-polynet-secrets"
+  ],
+  "alias": {
+    "name": "/products/polynet",
+    "mount": "auth/oidc/"
+  }
+}

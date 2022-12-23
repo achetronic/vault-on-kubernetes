@@ -1,0 +1,14 @@
+{
+  "policies": [
+    "acls-read-human-secrets",
+    "acls-write-human-secrets",
+    "acls-read-kubernetes-secrets",
+    "acls-deny-sensitive-kubernetes-secrets",
+    "acls-deny-cubbyhole",
+    "acls-deny-ultrainstinct"
+  ],
+  "alias": {
+    "name": "/functions/managers",
+    "mount": "auth/oidc/"
+  }
+}

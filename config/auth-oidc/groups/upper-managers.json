@@ -1,0 +1,10 @@
+{
+  "policies": [
+    "acls-admin",
+    "acls-deny-cubbyhole"
+  ],
+  "alias": {
+    "name": "/functions/upper-managers",
+    "mount": "auth/oidc/"
+  }
+}
