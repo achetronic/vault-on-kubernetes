@@ -1,11 +1,8 @@
 {
   "policies": [
-    "acls-read-human-secrets",
-    "acls-write-human-secrets",
     "acls-read-kubernetes-secrets",
     "acls-deny-sensitive-kubernetes-secrets",
-    "acls-deny-cubbyhole",
-    "acls-deny-ultrainstinct"
+    "acls-deny-cubbyhole"
   ],
   "alias": {
     "name": "/functions/managers",

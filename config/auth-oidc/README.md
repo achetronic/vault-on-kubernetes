@@ -39,12 +39,12 @@ The variables are defined as follows:
 
 ```console
 # Variables for Keycloak
-export KEYCLOAK_REALM_URI="https://keycloak.infrastructure.s73cloud.com/realms/internal"
+export KEYCLOAK_REALM_URI="https://keycloak.infrastructure.example.com/realms/internal"
 export KEYCLOAK_CLIENT_ID="hashicorp-vault"
 export KEYCLOAK_CLIENT_SECRET="xxxEXAMPLExxx"
 
 # Variables for Vault itself
-export VAULT_ADDR="https://vault.infrastructure.s73cloud.com"
+export VAULT_ADDR="https://vault.infrastructure.example.com"
 export VAULT_ROOT_TOKEN="s.xxxEXAMPLExxx"
 ```
 
@@ -54,7 +54,8 @@ After defining the variables, you only need to execute the bast script to go, as
 bash ./init.sh
 ```
 
-> You will see some errors when resources already exists inside Vault, for example, creating aliases, etc; don't worry about it
+> You will see some errors when resources already exists inside Vault, for example, creating aliases, etc. 
+> Don't worry about it
 > [and read this](README.md#why-bash-script-for-configuring-oidc-for-vault).
 
 ## FAQ

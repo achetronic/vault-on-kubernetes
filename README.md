@@ -1,20 +1,20 @@
-# Vault
-
-> The new Vault can be found [here](https://vault.infrastructure.s73cloud.com)
+# Vault on Kubernetes
 
 ## Description
 
-Hashicorp Vault deployment inside Kubernetes. This is the vault used to provision secrets across Kubernetes clusters
+Deploy [Hashicorp Vault](https://www.vaultproject.io/) inside Kubernetes without the initial pain.
+
+This is a vault used to provision secrets across Kubernetes clusters
 
 ## Diagram
 
 ```text
         
           ┌┬─────────────┬┐       ┌┬─────────────┬┐
-          ││  S3 Bucket  ││       ││   KMS key   ││
+          ││ PVC Volumes ││       ││   KMS key   ││
           └┴──────▲──────┴┘       └┴──────┬──────┴┘
                   │                       │
-                  │ (Storage, not HA)     │ (Unsealing)
+                  │ (Storage, Raft HA)    │ (Unsealing)
                   │                       │
           ┌───────┴───────────────────────▼───────┐
           │                                       │
@@ -38,17 +38,16 @@ Hashicorp Vault deployment inside Kubernetes. This is the vault used to provisio
 
 ## Motivation
 
-In the first stages of the migration to Kubernetes, SRE members had to look for a safe way to provision secrets to the
-clusters. This way had to be safe and automated too. Doing research we discovered External Secrets project, from Godaddy.
-This is an operator for Kubernetes (included into the [Tooling Stack](https://gitlab.infrastructure.s73cloud.com/Infrastructure/tooling-stack)) 
-which can get secrets from a vault like this, and generate Kubernetes Secrets at change. Of course, for achieving that, 
-we needed a vault, and we wanted it to be agnostic to the cloud. Safe, automated, opensource, agnostic, Kubernetes friendly... 
-Hashicorp Vault was basically the winner.
+In the first stages of a migration to Kubernetes, SRE members have to look for a safe way to provision secrets to the
+clusters. This way has to be safe and automated too. Doing research you can discover External Secrets project, from Godaddy.
+This is an operator for Kubernetes which can get secrets from a vault like this, and generate Kubernetes Secrets at change. 
+Of course, for achieving that, you need a vault, and better to be agnostic to the cloud. 
+Safe, automated, opensource, agnostic, Kubernetes friendly... Hashicorp Vault is basically the winner.
 
 ## Provisioning cloud resources
 
-To launch Vault, there are several required resources. Some of them are permissions for the IAM generated user, some 
-bucket to store all the data (of course, encrypted), and a KMS key that [you better not delete](README.md#unsealing-process)
+To launch Vault in production, there are several required resources. Some of them are permissions for the IAM generated user, 
+some bucket to store all the data (of course, encrypted), and a KMS key that [you better not delete](README.md#unsealing-process)
 
 These resources are created per environment, with the Terraform code inside the directory `iac/`. 
 To have deeper information about the process, better read the [specific documentation](iac/README.md)
@@ -81,15 +80,17 @@ helm dependency update
 helm upgrade --install vault . -f values-production.yaml --namespace vault
 ```
 
+> Remember to modify `values-production.yaml` according to your needs
+
 ## Init your vault
 
-> This process was done by SRE members, so you can skip this step. This information is here just to spread the knowledge
-> with the rest of the teams. Moreover, you need to perform this if you launch this system inside other environments
+> This process is done by SRE members. This information is here just to spread the knowledge
+> with the rest of the teams. You need to perform this if you launch this system inside other environments
 > different to `production`
 
 Very first time that Vault is started, some keys are required to be generated and stored in a safe place. These keys are
 commonly required to unseal the vault, for that reason they are called the `Unsealing Keys`. Unsealing process can be 
-automated using a KMS key as the `Unsealing Key` (spoiler: we did it).
+automated using a KMS key as the `Unsealing Key`
 
 When detecting this automation, the behaviour from Vault changes automatically, and will generate `Recovery Keys` instead
 of the `Unsealing Keys`. This kind of keys are better explained in [this section](README.md#unsealing-process), so 
@@ -135,8 +136,8 @@ together because you need at least 3 of them at the same time to generate the to
 Of course, this special token has the highest privileges and must not be used for daily tasks, for anything, and must be 
 revoked when not needed. The right way to go is generating the right policies for the real users on its place.
 
-These `Recovery Keys` are stored in the `root` AWS account of the company, for the case the situation gets...dangerous.
-So if you need to generate a root token to fight a disaster, and you are the Chapter Lead SRE, ask the upper managers for 
+These `Recovery Keys` are usually stored in the `root` AWS account of the company, for the case the situation gets...dangerous.
+So if you need to generate a root token to fight a disaster, and you are an SRE, ask the upper managers for 
 the access. After fixing the problem, please, revoke the token.
 
 To generate a `Root Token` using the `Recovery Keys`, just follow the 
@@ -155,7 +156,7 @@ and you can sleep relaxed (unless you delete the KMS key, then you are fu*@!d �
 
 ## Configuration about OIDC
 
-To be able to work with the OIDC provider (Keycloak at the moment of writing this), Vault need some configuration to
+To be able to work with the OIDC provider (the best, Keycloak at the moment of writing this), Vault need some configuration to
 match the internal policies with the `groups` claim coming into the JWT provided by the OIDC provider. This configuration 
 needs only to be applied one time (spoiler: SRE members already applied it on `production` deployment). Full documentation
 for this can be found on the [specific documentation](config/auth-oidc/README.md)
@@ -167,5 +168,4 @@ You have a simple set of instructions on this [README](docs/README.md) to launch
 ## How to collaborate
 
 1. Create a branch and change inside everything you need
-2. Launch a cluster pointing tooling-stack to this repository but to your branch
-3. Open a Pull Request to merge your code. Don't be dirty with the commits (squash them), be clear with the commit message, etc
+2. Open a Pull Request to merge your code. Don't be dirty with the commits (squash them), be clear with the commit message, etc

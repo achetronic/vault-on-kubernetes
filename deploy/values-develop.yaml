@@ -38,11 +38,6 @@ vault:
         secretName: vault-cloud-credentials
         secretKey: AWS_SECRET_ACCESS_KEY
 
-      # Credentials for KMS, which is used for auto-unsealing
-      - envName: VAULT_AWSKMS_SEAL_KEY_ID
-        secretName: vault-cloud-credentials
-        secretKey: VAULT_AWSKMS_SEAL_KEY_ID
-
     # DISCLAIMER:
     # S3 storage does not support HA. That is the reason behind using standalone mode for development.
     # If you want to use HA, please use Raft or Consult as storage for that.
@@ -70,11 +65,6 @@ vault:
           bucket     = "bucket-s3-develop-example-com"
           region     = "eu-west-1"
         }
-        
-        # Configuration for auto-unsealing
-        #seal "awskms" {
-        #  region     = "eu-west-1"
-        #}
 
   # Configuration parameters for Vault GUI
   ui:

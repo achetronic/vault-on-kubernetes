@@ -44,8 +44,7 @@ vault:
       #  secretKey: VAULT_AWSKMS_SEAL_KEY_ID
 
     # DISCLAIMER:
-    # S3 storage does not support HA. That is the reason behind using standalone mode by the moment.
-    # If you want to use HA, please use Raft or Consult as storage for that.
+    # S3 storage does not support HA. If you want to use HA, please use Raft or Consult as storage for that.
     # Ref: https://www.consul.io/docs/k8s/installation/install#helm-chart-installation
     # Ref: https://www.vaultproject.io/docs/platform/k8s/helm/examples/ha-with-raft
     # Ref: https://www.vaultproject.io/docs/platform/k8s/helm/examples/ha-with-consul

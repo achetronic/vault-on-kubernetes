@@ -1,9 +1,7 @@
 {
   "policies": [
-    "acls-read-human-secrets",
     "acls-list-kubernetes-secrets",
     "acls-deny-sensitive-kubernetes-secrets",
-    "acls-deny-ultrainstinct",
     "acls-deny-cubbyhole"
   ],
   "alias": {

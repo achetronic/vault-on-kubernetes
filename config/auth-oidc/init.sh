@@ -8,12 +8,12 @@
 ########################################################################################################################
 
 # Variables for Keycloak
-export KEYCLOAK_REALM_URI="https://keycloak.infrastructure.s73cloud.com/realms/internal"
+export KEYCLOAK_REALM_URI="https://keycloak.infrastructure.example.com/realms/internal"
 export KEYCLOAK_CLIENT_ID="hashicorp-vault"
 export KEYCLOAK_CLIENT_SECRET="xxxEXAMPLExxx"
 
 # Variables for Vault itself
-export VAULT_ADDR="https://vault.infrastructure.s73cloud.com"
+export VAULT_ADDR="https://vault.infrastructure.example.com"
 export VAULT_ROOT_TOKEN="s.xxxEXAMPLExxx"
 
 ########################################################################################################################

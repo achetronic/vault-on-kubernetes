@@ -1,7 +1,6 @@
 {
   "policies": [
-    "acls-admin",
-    "acls-deny-ultrainstinct"
+    "acls-admin"
   ],
   "alias": {
     "name": "/chapters/sre",
