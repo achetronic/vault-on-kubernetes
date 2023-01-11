@@ -161,10 +161,6 @@ match the internal policies with the `groups` claim coming into the JWT provided
 needs only to be applied one time (spoiler: SRE members already applied it on `production` deployment). Full documentation
 for this can be found on the [specific documentation](config/auth-oidc/README.md)
 
-## Full documentation
-
-You have a simple set of instructions on this [README](docs/README.md) to launch the docs locally
-
 ## How to collaborate
 
 1. Create a branch and change inside everything you need
